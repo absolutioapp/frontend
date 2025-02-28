@@ -36,3 +36,9 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+.env
+.history
+google-services.json
+scripts
+.vscode
+package-lock.json
