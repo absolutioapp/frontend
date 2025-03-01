@@ -1,4 +1,4 @@
-package com.testapp
+package com.absolutio.absolutioapp
 
 import android.app.Application
 import android.content.res.Configuration

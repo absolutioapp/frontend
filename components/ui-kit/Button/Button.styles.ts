@@ -13,6 +13,7 @@ interface StyledButtonProps {
 interface StyledTextProps {
   buttonType: "primary" | "outlined";
   customTextStyles?: any;
+  isIcon?: boolean;
 }
 
 export const StyledButton = styled.TouchableOpacity<StyledButtonProps>`
@@ -60,8 +61,9 @@ export const StyledButton = styled.TouchableOpacity<StyledButtonProps>`
 
 export const StyledText = styled.Text<StyledTextProps>`
   text-align: center;
+  ${(props: { isIcon: boolean }) => !props.isIcon && "width: 100%;"}
   font-weight: 600;
-  padding: 12px 0;
+  padding: 16px 0;
   font-size: 20px;
   ${(props: { buttonType: ButtonTypes }) =>
     props.buttonType === ButtonTypes.primary &&

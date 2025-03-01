@@ -1,47 +1,18 @@
-import React, { useState } from "react";
-import { View, TextInput, Button, Text } from "react-native";
-import { auth, GoogleSignin } from "@/service/firebaseConfig";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
+import React, { useEffect } from "react";
+import { View } from "react-native";
 import CustomButton from "../ui-kit/Button/Button";
 import { ButtonTypes } from "../ui-kit/Button/Button.types";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 
-const Auth = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+import GoogleAuth from "./auth_methods/GoogleAuth";
 
+const Auth = () => {
   const router = useRouter();
 
   const handleSignUp = () => {
-    console.log("handleSignUp");
-    router.push("/modal");
-  };
-
-  const handleSignIn = async () => {
-    // try {
-    //   await signInWithEmailAndPassword(auth, email, password);
-    // } catch (err: any) {
-    //   setError(err.message);
-    // }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      //   await GoogleSignin.hasPlayServices();
-      //   const userInfo = await GoogleSignin.signIn();
-      //   const googleCredential = GoogleAuthProvider.credential(userInfo.idToken);
-      //   await signInWithCredential(auth, googleCredential);
-    } catch (err: any) {
-      setError(err.message);
-    }
+    router.push("/email_modal");
   };
 
   return (
@@ -49,7 +20,7 @@ const Auth = () => {
       style={{
         justifyContent: "center",
         alignItems: "center",
-        gap: 10,
+        gap: 20,
         width: "80%",
         margin: "auto",
         paddingTop: 20,
@@ -72,7 +43,7 @@ const Auth = () => {
           />
         }
       />
-      <CustomButton
+      {/* <CustomButton
         text="Continue with Google"
         handleClick={() => {}}
         buttonType={ButtonTypes.primary}
@@ -87,10 +58,11 @@ const Auth = () => {
             color={"#ffffff"}
           />
         }
-      />
+      /> */}
+      <GoogleAuth />
       <CustomButton
         text="Continue with Apple"
-        handleClick={handleGoogleSignIn}
+        handleClick={() => {}}
         isIcon
         IconValue={
           <AntDesign
@@ -104,14 +76,9 @@ const Auth = () => {
         customStyles="background-color: black!important;"
         disabled
       />
-      {error ? <Text>{error}</Text> : null}
+      {/* {error ? <Text>{error}</Text> : null} */}
     </View>
   );
 };
 
 export default Auth;
-
-/*
-
-customStyles="!bg-[#4285F4]"
-customStyles="!bg-gray-800"*/

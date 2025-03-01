@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "test-app",
-    "slug": "test-app",
+    "name": "absolutio-app",
+    "slug": "absolutio-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,14 +10,16 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.maxha41.testapp"
+      "bundleIdentifier": "com.absolutio.absolutioapp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "googleServicesFile": "./google-services.json"
       },
-      "package": "com.maxha41.testapp"
+      "package": "com.absolutio.absolutioapp"
     },
     "web": {
       "bundler": "metro",
@@ -33,6 +35,17 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true
+          },
+          "ios": {
+            "useFrameworks": "static"
+          }
         }
       ]
     ],
