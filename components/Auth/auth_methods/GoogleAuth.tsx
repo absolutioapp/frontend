@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import { initializeApp } from "firebase/app";
 import {
-  getAuth,
   signInWithCredential,
   GoogleAuthProvider,
   signInWithPopup,
@@ -13,21 +11,34 @@ import { useRouter } from "expo-router";
 import CustomButton from "../../../components/ui-kit/Button/Button";
 import { ButtonTypes } from "../../../components/ui-kit/Button/Button.types";
 import useUserStore from "@/stores/userStore";
-import { firebaseConfig } from "@/firebaseConfig";
+import { auth } from "@/firebaseConfig";
 import AntDesign from "@expo/vector-icons/AntDesign";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 // Настройка для использования WebBrowser
 WebBrowser.maybeCompleteAuthSession();
 
 // Firebase инициализация
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
 export default function GoogleAuth() {
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const userStore = useUserStore();
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    redirectUri: process.env.EXPO_PUBLIC_GOOGLE_REDIRECT_URI,
+  });
+
+  useEffect(() => {
+    console.log(response);
+    if (response?.type === "success") {
+      const { id_token } = response.params;
+      const credential = GoogleAuthProvider.credential(id_token);
+      signInWithCredential(auth, credential);
+      userStore.setToken(id_token);
+      router.replace("/(dashboard)/diary");
+    }
+  }, [response]);
 
   const signInWithGoogle = async () => {
     if (Platform.OS === "web") {
@@ -36,10 +47,10 @@ export default function GoogleAuth() {
       const userCredential = await signInWithPopup(auth, provider);
       console.log("Вошли как:", userCredential.user.email);
       userStore.setToken(userCredential.user.accessToken);
+      router.replace("/(dashboard)/diary");
     } else {
       try {
-        console.log("Успешный вход через Google");
-        // userStore.setToken(userCredential.user.accessToken);
+        await promptAsync();
       } catch (error) {
         console.log(error);
       }

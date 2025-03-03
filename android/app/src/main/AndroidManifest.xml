@@ -24,9 +24,9 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="myapp"/>
+        <data android:scheme="com.absolutio.absolutioapp:/oauthredirect"/>
         <data android:scheme="com.absolutio.absolutioapp"/>
-        <data android:scheme="exp+absolutio-app"/>
+        <data android:scheme="exp+absolutioapp"/>
       </intent-filter>
     </activity>
   </application>

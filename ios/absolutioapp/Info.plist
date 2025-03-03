@@ -29,7 +29,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>myapp</string>
+          <string>com.absolutio.absolutioapp:/oauthredirect</string>
           <string>com.absolutio.absolutioapp</string>
         </array>
       </dict>
@@ -42,7 +42,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>exp+absolutio-app</string>
+          <string>exp+absolutioapp</string>
         </array>
       </dict>
     </array>

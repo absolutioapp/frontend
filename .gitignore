@@ -43,3 +43,4 @@ scripts
 .vscode
 package-lock.json
 GoogleService-Info.plist
+yarn.lock
