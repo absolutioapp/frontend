@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useRouter } from "expo-router";
 import useUserStore from "@/stores/userStore";
@@ -7,6 +7,7 @@ import HttpService from "@/service/httpService";
 export const useCheckToken = () => {
   const router = useRouter();
   const { setUser } = useUserStore();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -33,6 +34,7 @@ export const useCheckToken = () => {
         router.replace("/(dashboard)/wallpaper");
 
         try {
+          setLoading(true);
           await HttpService.google.getProfile();
         } catch (error) {
           console.log("Token validation failed:", error);

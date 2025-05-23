@@ -89,7 +89,7 @@ export const StatCard = styled.View`
   min-width: 288px;
   border: 1px solid #3b4854;
   border-radius: 12px;
-  padding: 24px;
+  padding: 12px 24px;
   gap: 12px;
   background-color: #111518;
 `;
@@ -108,7 +108,7 @@ export const StatValue = styled.Text`
 
 export const Row = styled.View`
   ${flexRow}
-  gap: 4px;
+  gap: 20px;
 `;
 
 export const MutedText = styled.Text`
