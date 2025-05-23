@@ -1,31 +1,32 @@
 import { create } from "zustand";
 
 interface UserStore {
-  token: string;
-  refresh_token: string;
+  idToken: string;
+  accessToken: string;
   name: string;
   isSubscriber: boolean;
 
-  setToken: (token: string) => void;
-  setRefreshToken: (refresh_token: string) => void;
+  setIdToken: (token: string) => void;
+  setAccessToken: (token: string) => void;
   setName: (name: string) => void;
   setIsSubscriber: (isSubscriber: boolean) => void;
 
-  setUser: (user: UserStore) => void;
+  setUser: (user: Partial<UserStore>) => void;
 }
 
 const useUserStore = create<UserStore>((set) => ({
-  token: "",
-  refresh_token: "",
+  idToken: "",
+  accessToken: "",
   name: "",
   isSubscriber: false,
 
-  setToken: (token: string) => set({ token }),
-  setRefreshToken: (refresh_token: string) => set({ refresh_token }),
+  setIdToken: (token: string) => set({ idToken: token }),
+  setAccessToken: (token: string) => set({ accessToken: token }),
   setName: (name: string) => set({ name }),
   setIsSubscriber: (isSubscriber: boolean) => set({ isSubscriber }),
 
-  setUser: (user: UserStore) => set(user),
+  setUser: (user: Partial<UserStore>) =>
+    set((state) => ({ ...state, ...user })),
 }));
 
 export default useUserStore;

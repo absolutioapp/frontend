@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -11,33 +11,53 @@ import { ButtonTypes } from "../../ui-kit/Button/Button.types";
 import Input from "../../ui-kit/Input/Input";
 import useUserStore from "@/stores/userStore";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function EmailSignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const userStore = useUserStore();
 
-  const handleEmailAuth = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential: UserCredential) => {
-        console.log(userCredential);
-        userStore.setToken(userCredential.user.accessToken);
-        router.replace("/(dashboard)/diary");
-      })
-      .catch((error) => {
-        if (error.code === "auth/invalid-credential") {
-          createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-              console.log("User registered:", userCredential.user);
-              userStore.setToken(userCredential.user.accessToken);
-              router.replace("/(dashboard)/diary");
-            })
-            .catch((registrationError) => {});
-        } else {
+  const saveTokens = async (idToken: string) => {
+    try {
+      await AsyncStorage.setItem("userTokenId", idToken);
+      userStore.setIdToken(idToken);
+    } catch (error) {
+      console.error("Ошибка при сохранении токена:", error);
+    }
+  };
+
+  const handleEmailAuth = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const idToken = await userCredential.user.getIdToken();
+      await saveTokens(idToken);
+      router.replace("/(dashboard)/diary");
+    } catch (error: any) {
+      if (error.code === "auth/invalid-credential") {
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          const idToken = await userCredential.user.getIdToken();
+          await saveTokens(idToken);
+          router.replace("/(dashboard)/diary");
+        } catch (registrationError: any) {
+          setError(registrationError.message);
         }
-      });
+      } else {
+        setError(error.message);
+      }
+    }
   };
 
   const validateEmail = (email: string) => {
@@ -48,6 +68,7 @@ export default function EmailSignIn() {
   const changeEmail = (email: string) => {
     email !== "" && setIsEmailValid(validateEmail(email));
     setEmail(email);
+    setError(null);
   };
 
   return (
@@ -72,12 +93,12 @@ export default function EmailSignIn() {
         secureTextEntry
       />
 
+      {error && <Text style={{ color: "red", marginBottom: 10 }}>{error}</Text>}
+
       <CustomButton
         text="Continue"
         disabled={!email || !password}
-        handleClick={() => {
-          handleEmailAuth();
-        }}
+        handleClick={handleEmailAuth}
         buttonType={ButtonTypes.primary}
       />
     </View>

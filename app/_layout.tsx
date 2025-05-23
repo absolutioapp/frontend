@@ -1,3 +1,4 @@
+import useCheckToken from "@/hooks/useCheckToken";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
 import { Platform } from "react-native";
@@ -18,6 +19,8 @@ export default function RootLayout() {
       document.body.appendChild(scriptTag);
     }
   }, []);
+
+  useCheckToken();
 
   return (
     <Stack
